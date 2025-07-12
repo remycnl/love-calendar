@@ -21,7 +21,10 @@
 					<div class="text-4xl mb-4">🔐</div>
 					<h1 class="text-2xl font-bold text-white mb-2">Administration</h1>
 					<p style="color: var(--color-cream-200)">
-						Accès sécurisé aux enveloppes d'amour
+						Accès sécurisé aux enveloppes, héhéhé t'as pas le code secret... ? 👀
+					</p>
+                    <p class="mt-2 text-sm" style="color: var(--color-coral-300)">
+                        (tu pues le cornichon pourri…)
 					</p>
 				</div>
 
