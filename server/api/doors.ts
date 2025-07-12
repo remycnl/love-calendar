@@ -1,3 +1,5 @@
+import prisma from "../../lib/prisma";
+
 export default defineEventHandler(async (event) => {
 	const method = event.method;
 
@@ -12,12 +14,7 @@ export default defineEventHandler(async (event) => {
 				});
 			}
 
-			// Lire les données via import statique
-			const doorsModule = await import("~/data/doors.json");
-			const data = doorsModule.default || doorsModule;
-
-			// Trouver l'enveloppe
-			const door = data.doors.find((d) => d.week === week);
+			const door = await prisma.door.findUnique({ where: { week } });
 			if (!door) {
 				throw createError({
 					statusCode: 404,
@@ -25,23 +22,20 @@ export default defineEventHandler(async (event) => {
 				});
 			}
 
-			// Actions possibles: toggle, open, close
-			if (action === "toggle") {
-				door.opened = !door.opened;
-			} else if (action === "open") {
-				door.opened = true;
-			} else if (action === "close") {
-				door.opened = false;
-			}
+			let newOpened = door.opened;
+			if (action === "toggle") newOpened = !door.opened;
+			else if (action === "open") newOpened = true;
+			else if (action === "close") newOpened = false;
 
-			// Pour les modifications, utiliser le storage Nitro
-			const storage = useStorage();
-			await storage.setItem("doors.json", data);
+			const updated = await prisma.door.update({
+				where: { week },
+				data: { opened: newOpened },
+			});
 
 			return {
 				success: true,
-				door,
-				action: door.opened ? "opened" : "closed",
+				door: updated,
+				action: updated.opened ? "opened" : "closed",
 			};
 		} catch (error) {
 			console.error("Erreur POST doors:", error);
@@ -54,17 +48,8 @@ export default defineEventHandler(async (event) => {
 
 	// GET request - retourner toutes les enveloppes
 	try {
-		// Essaie d'abord depuis le storage
-		const storage = useStorage();
-		let data = await storage.getItem("doors.json");
-
-		// Si pas dans le storage, charge depuis le fichier
-		if (!data) {
-			const doorsModule = await import("~/data/doors.json");
-			data = doorsModule.default || doorsModule;
-		}
-
-		return data;
+		const doors = await prisma.door.findMany({ orderBy: { week: "asc" } });
+		return { doors };
 	} catch (error) {
 		console.error("Erreur GET doors:", error);
 		throw createError({

@@ -1,0 +1,19 @@
+// Prisma schema for Neon PostgreSQL
+// Table: doors
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Door {
+  id     Int     @id @default(autoincrement())
+  week   Int     @unique
+  opened Boolean @default(false)
+  title  String
+  text   String
+}
