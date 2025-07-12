@@ -56,11 +56,9 @@ export default defineEventHandler(async (event) => {
 
 	// GET request - retourner toutes les enveloppes
 	try {
-		const filePath = join(process.cwd(), "data", "doors.json");
-		const fileContent = await fs.readFile(filePath, "utf-8");
-		const data = JSON.parse(fileContent);
+		const data = await import('~/data/doors.json');
 
-		return data;
+		return data.default || data;
 	} catch (error) {
 		throw createError({
 			statusCode: 500,
