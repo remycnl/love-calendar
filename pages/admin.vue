@@ -78,7 +78,7 @@
 		<div v-else class="min-h-screen" style="background: linear-gradient(135deg, var(--color-cream-200) 0%, #f8f9fa 50%, var(--color-cream-100) 100%);">
 			<!-- Header admin modernisé et responsive -->
 			<div
-				class="backdrop-blur-xl border-b sticky top-0 z-50 transition-all duration-300"
+				class="backdrop-blur-xl border-b fixed inset-0 h-fit rounded-b-3xl md:rounded-b-4xl z-50 transition-all duration-300"
 				style="background: rgba(175, 62, 62, 0.95); border-color: rgba(175, 62, 62, 0.3); box-shadow: 0 8px 32px rgba(175, 62, 62, 0.1);">
 				<div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
 					<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -156,7 +156,7 @@
 			</div>
 
 			<!-- Contenu principal modernisé et responsive -->
-			<div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 mx-auto">
+			<div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8  mt-35 mx-auto">
 				<!-- Dashboard Stats avec animations - responsive grid -->
 				<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-12">
 					<div

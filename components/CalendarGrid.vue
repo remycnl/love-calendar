@@ -37,7 +37,7 @@
         </div>
 		<!-- Header avec consigne - Full Width et responsive -->
 		<div
-			class="relative overflow-hidden py-8 sm:py-12 w-full"
+			class="relative overflow-hidden rounded-b-[2.5rem] md:rounded-b-[3rem] py-8 sm:py-12 w-full"
 			style="
 				background: linear-gradient(
 					135deg,
