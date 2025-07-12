@@ -1,6 +1,3 @@
-import { promises as fs } from 'fs';
-import { resolve } from 'path';
-
 export default defineEventHandler(async (event) => {
 	const method = event.method;
 
@@ -24,13 +21,15 @@ export default defineEventHandler(async (event) => {
 		const token = authHeader.split(" ")[1];
 		const config = useRuntimeConfig();
 		const secretPassword = config.secretPassword;
+
 		if (!secretPassword) {
 			throw createError({
 				statusCode: 500,
 				statusMessage: "Configuration serveur invalide",
 			});
 		}
-		const expectedToken = Buffer.from(secretPassword).toString('base64');
+
+		const expectedToken = Buffer.from(secretPassword).toString("base64");
 		if (token !== expectedToken) {
 			throw createError({
 				statusCode: 401,
@@ -39,6 +38,7 @@ export default defineEventHandler(async (event) => {
 		}
 
 		const { action } = await readBody(event);
+
 		if (!action || !["open_all", "close_all"].includes(action)) {
 			throw createError({
 				statusCode: 400,
@@ -46,47 +46,49 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		// Lire et écrire UNIQUEMENT dans le fichier data/doors.json
-		const filePath = resolve(process.cwd(), 'data/doors.json');
-		let fileContent = await fs.readFile(filePath, 'utf-8');
-		let data = JSON.parse(fileContent);
+		// Système hybride : Storage + Import statique
+		const storage = useStorage();
+		let data = (await storage.getItem("doors.json")) as any;
 
+		// Si pas dans le storage, charge depuis le fichier original
+		if (!data) {
+			const doorsModule = await import("~/data/doors.json");
+			data = doorsModule.default || doorsModule;
+		}
+
+		// Modifier les données
 		const targetStatus = action === "open_all";
 		let updatedCount = 0;
-		(data.doors as any[]).forEach((door: any) => {
+
+		data.doors.forEach((door: any) => {
 			if (door.opened !== targetStatus) {
 				updatedCount++;
 			}
 			door.opened = targetStatus;
 		});
 
-		try {
-			await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
-		} catch (writeError) {
-			console.error("Erreur lors de l'écriture dans le fichier:", writeError);
-			throw createError({
-				statusCode: 500,
-				statusMessage: "Erreur lors de la sauvegarde des données dans le fichier doors.json",
-			});
-		}
+		// Sauvegarder dans le storage Nitro (persistant sur Vercel)
+		await storage.setItem("doors.json", data);
 
 		return {
 			success: true,
-			action: action,
-			targetStatus: targetStatus,
+			action,
+			targetStatus,
 			totalDoors: data.doors.length,
-			updatedCount: updatedCount,
+			updatedCount,
 			doors: data.doors,
+			message: `✅ ${updatedCount} portes modifiées et sauvegardées.`,
 		};
-	} catch (error) {
+	} catch (error: any) {
 		console.error("Erreur lors de l'opération en masse:", error);
-		const err = error as any;
-		if (err.statusCode) {
-			throw err;
-		}
+
+		if (error.statusCode) throw error;
+
 		throw createError({
 			statusCode: 500,
-			statusMessage: `Erreur lors de l'opération en masse: ${err.message || 'Erreur inconnue'}`,
+			statusMessage: `Erreur lors de l'opération en masse: ${
+				error.message || "Erreur inconnue"
+			}`,
 		});
 	}
 });

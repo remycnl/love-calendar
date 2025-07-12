@@ -509,8 +509,8 @@ const checkExistingAuth = async () => {
 					// Vérifier le token côté serveur
 					const response = await fetch("/api/auth/verify", {
 						headers: {
-						Authorization: `Bearer ${savedToken}`,
-					},
+							Authorization: `Bearer ${savedToken}`,
+						},
 					});
 
 					if (response.ok) {
