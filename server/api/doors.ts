@@ -1,6 +1,3 @@
-import { promises as fs } from "fs";
-import { join } from "path";
-
 export default defineEventHandler(async (event) => {
 	const method = event.method;
 
@@ -15,13 +12,12 @@ export default defineEventHandler(async (event) => {
 				});
 			}
 
-			// Lire le fichier JSON
-			const filePath = join(process.cwd(), "data", "doors.json");
-			const fileContent = await fs.readFile(filePath, "utf-8");
-			const data = JSON.parse(fileContent);
+			// Lire les données via import statique
+			const doorsModule = await import("~/data/doors.json");
+			const data = doorsModule.default || doorsModule;
 
 			// Trouver l'enveloppe
-			const door = data.doors.find((d: any) => d.week === week);
+			const door = data.doors.find((d) => d.week === week);
 			if (!door) {
 				throw createError({
 					statusCode: 404,
@@ -38,8 +34,9 @@ export default defineEventHandler(async (event) => {
 				door.opened = false;
 			}
 
-			// Sauvegarder le fichier
-			await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+			// Pour les modifications, utiliser le storage Nitro
+			const storage = useStorage();
+			await storage.setItem("doors.json", data);
 
 			return {
 				success: true,
@@ -47,6 +44,7 @@ export default defineEventHandler(async (event) => {
 				action: door.opened ? "opened" : "closed",
 			};
 		} catch (error) {
+			console.error("Erreur POST doors:", error);
 			throw createError({
 				statusCode: 500,
 				statusMessage: "Erreur lors de la modification de l'enveloppe",
@@ -56,10 +54,19 @@ export default defineEventHandler(async (event) => {
 
 	// GET request - retourner toutes les enveloppes
 	try {
-		const data = await import('~/data/doors.json');
+		// Essaie d'abord depuis le storage
+		const storage = useStorage();
+		let data = await storage.getItem("doors.json");
 
-		return data.default || data;
+		// Si pas dans le storage, charge depuis le fichier
+		if (!data) {
+			const doorsModule = await import("~/data/doors.json");
+			data = doorsModule.default || doorsModule;
+		}
+
+		return data;
 	} catch (error) {
+		console.error("Erreur GET doors:", error);
 		throw createError({
 			statusCode: 500,
 			statusMessage: "Erreur lors du chargement des enveloppes",

@@ -1,65 +1,120 @@
-import { promises as fs } from "fs";
-import { join } from "path";
-
 export default defineEventHandler(async (event) => {
 	const method = event.method;
 
-	// Vérification simple du token (en production, utilisez une méthode plus sécurisée)
-	const authHeader = getHeader(event, "authorization");
-	if (!authHeader || !authHeader.startsWith("Bearer ")) {
-		throw createError({
-			statusCode: 401,
-			statusMessage: "Token requis",
-		});
-	}
-
-	if (method === "PUT") {
+	if (method === "POST") {
 		try {
-			const { week, title, text } = await readBody(event);
+			const { week, action = "toggle" } = await readBody(event);
 
-			if (!week || !title || !text) {
+			if (!week || week < 1 || week > 52) {
 				throw createError({
 					statusCode: 400,
-					statusMessage: "Données manquantes",
+					statusMessage: "Numéro d'enveloppe invalide",
 				});
 			}
 
-			// Lire le fichier JSON
-			const filePath = join(process.cwd(), "data", "doors.json");
-			const fileContent = await fs.readFile(filePath, "utf-8");
-			const data = JSON.parse(fileContent);
+			// Lire les données via import statique
+			const doorsModule = await import("~/data/doors.json");
+			const data = doorsModule.default || doorsModule;
 
-			// Trouver et modifier l'enveloppe
-			const doorIndex = data.doors.findIndex((d: any) => d.week === week);
-			if (doorIndex === -1) {
+			// Trouver l'enveloppe
+			const door = data.doors.find((d) => d.week === week);
+			if (!door) {
 				throw createError({
 					statusCode: 404,
 					statusMessage: "Enveloppe non trouvée",
 				});
 			}
 
-			// Mettre à jour les données
-			data.doors[doorIndex].title = title;
-			data.doors[doorIndex].text = text;
+			// Actions possibles: toggle, open, close
+			if (action === "toggle") {
+				door.opened = !door.opened;
+			} else if (action === "open") {
+				door.opened = true;
+			} else if (action === "close") {
+				door.opened = false;
+			}
 
-			// Sauvegarder le fichier
-			await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+			// Pour les modifications, utiliser le storage Nitro
+			const storage = useStorage();
+			await storage.setItem("doors.json", data);
 
 			return {
 				success: true,
-				door: data.doors[doorIndex],
-				message: "Enveloppe mise à jour avec succès",
+				door,
+				action: door.opened ? "opened" : "closed",
 			};
 		} catch (error) {
+			console.error("Erreur POST doors:", error);
 			throw createError({
 				statusCode: 500,
-				statusMessage: "Erreur lors de la mise à jour",
+				statusMessage: "Erreur lors de la modification de l'enveloppe",
+			});
+		}
+	} else if (method === "PUT") {
+		try {
+			const { week, title, text } = await readBody(event);
+
+			if (!week || week < 1 || week > 52) {
+				throw createError({
+					statusCode: 400,
+					statusMessage: "Numéro d'enveloppe invalide",
+				});
+			}
+
+			// Lire les données via import statique puis storage
+			const storage = useStorage();
+			let data: any = await storage.getItem("doors.json");
+			if (!data) {
+				const doorsModule = await import("~/data/doors.json");
+				data = doorsModule.default || doorsModule;
+			}
+
+			// Trouver l'enveloppe
+			const door = (data.doors as any[]).find((d: any) => d.week === week);
+			if (!door) {
+				throw createError({
+					statusCode: 404,
+					statusMessage: "Enveloppe non trouvée",
+				});
+			}
+
+			// Mettre à jour le titre et le texte si fournis
+			if (typeof title === "string") door.title = title;
+			if (typeof text === "string") door.text = text;
+
+			await storage.setItem("doors.json", data);
+
+			return {
+				success: true,
+				door,
+			};
+		} catch (error) {
+			console.error("Erreur PUT doors:", error);
+			throw createError({
+				statusCode: 500,
+				statusMessage: "Erreur lors de la modification de l'enveloppe (PUT)",
 			});
 		}
 	}
 
-	throw createError({
-		statusCode: 405,
-		statusMessage: "Méthode non autorisée",
-	});
+	// GET request - retourner toutes les enveloppes
+	try {
+		// Essaie d'abord depuis le storage
+		const storage = useStorage();
+		let data = await storage.getItem("doors.json");
+
+		// Si pas dans le storage, charge depuis le fichier
+		if (!data) {
+			const doorsModule = await import("~/data/doors.json");
+			data = doorsModule.default || doorsModule;
+		}
+
+		return data;
+	} catch (error) {
+		console.error("Erreur GET doors:", error);
+		throw createError({
+			statusCode: 500,
+			statusMessage: "Erreur lors du chargement des enveloppes",
+		});
+	}
 });

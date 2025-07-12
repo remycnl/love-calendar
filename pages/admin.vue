@@ -48,7 +48,7 @@
 					<button
 						type="submit"
 						:disabled="isLoading"
-						class="w-full text-white py-3 px-4 rounded-lg font-semibold focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+						class="w-full cursor-pointer text-white py-3 px-4 rounded-lg font-semibold focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
 						style="
 							background: linear-gradient(
 								90deg,
@@ -133,7 +133,7 @@
 							<div class="flex items-center gap-2 sm:gap-3">
 								<NuxtLink
 									to="/"
-									class="group flex items-center gap-2 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+									class="group cursor-pointer flex items-center gap-2 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 backdrop-blur-sm"
 									style="background: linear-gradient(135deg, var(--color-coral-600), var(--color-rose-600)); box-shadow: 0 4px 15px rgba(218, 108, 108, 0.3);">
 									<span class="text-base sm:text-lg">🏠</span>
 									<span class="hidden sm:inline">Accueil</span>
@@ -141,7 +141,7 @@
 
 								<button
 									@click="logout"
-									class="group flex items-center gap-2 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+									class="group flex cursor-pointer items-center gap-2 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 backdrop-blur-sm"
 									style="background: linear-gradient(135deg, var(--color-burgundy-600), var(--color-burgundy-700)); box-shadow: 0 4px 15px rgba(175, 62, 62, 0.3);">
 									<span class="text-base sm:text-lg">🚪</span>
 									<span class="hidden sm:inline">Déconnexion</span>
@@ -157,7 +157,7 @@
 				<!-- Dashboard Stats avec animations - responsive grid -->
 				<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-12">
 					<div
-						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105 cursor-pointer"
+						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105"
 						style="background: rgba(175, 62, 62, 0.08); border-color: rgba(175, 62, 62, 0.2); box-shadow: 0 10px 40px rgba(175, 62, 62, 0.1);"
 						@mouseenter="$event.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'"
 						@mouseleave="$event.currentTarget.style.transform = 'translateY(0) scale(1)'">
@@ -180,7 +180,7 @@
 					</div>
 
 					<div
-						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105 cursor-pointer"
+						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105"
 						style="background: rgba(218, 108, 108, 0.08); border-color: rgba(218, 108, 108, 0.2); box-shadow: 0 10px 40px rgba(218, 108, 108, 0.1);"
 						@mouseenter="$event.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'"
 						@mouseleave="$event.currentTarget.style.transform = 'translateY(0) scale(1)'">
@@ -202,7 +202,7 @@
 					</div>
 
 					<div
-						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105 cursor-pointer"
+						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105"
 						style="background: rgba(205, 86, 86, 0.08); border-color: rgba(205, 86, 86, 0.2); box-shadow: 0 10px 40px rgba(205, 86, 86, 0.1);"
 						@mouseenter="$event.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'"
 						@mouseleave="$event.currentTarget.style.transform = 'translateY(0) scale(1)'">
@@ -224,7 +224,7 @@
 					</div>
 
 					<div
-						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105 cursor-pointer"
+						class="group relative overflow-hidden backdrop-blur-xl rounded-2xl p-4 sm:p-6 border transition-all duration-500 hover:scale-105"
 						style="background: rgba(175, 62, 62, 0.12); border-color: rgba(175, 62, 62, 0.25); box-shadow: 0 10px 40px rgba(175, 62, 62, 0.15);"
 						@mouseenter="$event.currentTarget.style.transform = 'translateY(-8px) scale(1.02)'"
 						@mouseleave="$event.currentTarget.style.transform = 'translateY(0) scale(1)'">
@@ -278,7 +278,7 @@
 								<button
 									@click="toggleAllDoors"
 									:disabled="isProcessingBulk"
-									class="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-2xl font-medium transition-all duration-300 disabled:opacity-50 backdrop-blur-sm hover:scale-105 whitespace-nowrap"
+									class="flex items-center cursor-pointer justify-center gap-2 px-4 sm:px-6 py-3 rounded-2xl font-medium transition-all duration-300 disabled:opacity-50 backdrop-blur-sm hover:scale-105 whitespace-nowrap"
 									style="background: linear-gradient(135deg, var(--color-coral-600), var(--color-rose-600)); color: white; box-shadow: 0 8px 25px rgba(218, 108, 108, 0.3);">
 									<span v-if="!isProcessingBulk">{{ allOpened ? '🔒 Tout Fermer' : '🔓 Tout Ouvrir' }}</span>
 									<span v-else>⏳ En cours...</span>
@@ -293,7 +293,7 @@
 							<div
 								v-for="door in filteredDoors"
 								:key="`door-${door.week}`"
-								class="group relative overflow-hidden backdrop-blur-sm rounded-2xl border transition-all duration-500 hover:scale-[1.02] cursor-pointer"
+								class="group relative overflow-hidden backdrop-blur-sm rounded-2xl border transition-all duration-500 hover:scale-[1.02]"
 								style="background: rgba(234, 235, 208, 0.05); border-color: rgba(175, 62, 62, 0.1);"
 								@mouseenter="$event.currentTarget.style.background = 'rgba(218, 108, 108, 0.08)'"
 								@mouseleave="$event.currentTarget.style.background = 'rgba(234, 235, 208, 0.05)'">
@@ -329,7 +329,7 @@
 												<button
 													@click="toggleDoorStatus(door)"
 													:disabled="isSaving[`status-${door.week}`]"
-													class="group/btn relative overflow-hidden px-3 sm:px-4 py-2 rounded-xl font-medium text-xs sm:text-sm transition-all duration-300 disabled:opacity-50 backdrop-blur-sm transform hover:scale-105"
+													class="group/btn cursor-pointer relative overflow-hidden px-3 sm:px-4 py-2 rounded-xl font-medium text-xs sm:text-sm transition-all duration-300 disabled:opacity-50 backdrop-blur-sm transform hover:scale-105"
 													:style="door.opened 
 														? 'background: linear-gradient(135deg, var(--color-rose-600), var(--color-burgundy-600)); color: white; box-shadow: 0 6px 20px rgba(205, 86, 86, 0.4);'
 														: 'background: linear-gradient(135deg, var(--color-coral-500), var(--color-rose-500)); color: white; box-shadow: 0 6px 20px rgba(218, 108, 108, 0.4);'">
@@ -406,7 +406,7 @@
 													<button
 														type="button"
 														@click="resetDoor(door)"
-														class="px-3 sm:px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 backdrop-blur-sm hover:scale-105"
+														class="px-3 sm:px-4 cursor-pointer py-2 rounded-xl font-medium text-sm transition-all duration-300 backdrop-blur-sm hover:scale-105"
 														style="background: rgba(175, 62, 62, 0.1); color: var(--color-burgundy-700); border: 1px solid rgba(175, 62, 62, 0.2);">
 														↺ Réinitialiser
 													</button>
@@ -415,7 +415,7 @@
 														type="button"
 														@click="saveDoor(door)"
 														:disabled="isSaving[door.week]"
-														class="group/save relative overflow-hidden px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm transform hover:scale-105"
+														class="group/save cursor-pointer relative overflow-hidden px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm transform hover:scale-105"
 														style="background: linear-gradient(135deg, var(--color-coral-600), var(--color-rose-600)); color: white; box-shadow: 0 8px 25px rgba(218, 108, 108, 0.4);">
 														<span v-if="!isSaving[door.week]" class="relative z-10 flex items-center gap-2">
 															<span>💾</span>
@@ -509,8 +509,8 @@ const checkExistingAuth = async () => {
 					// Vérifier le token côté serveur
 					const response = await fetch("/api/auth/verify", {
 						headers: {
-							Authorization: `Bearer ${savedToken}`,
-						},
+						Authorization: `Bearer ${savedToken}`,
+					},
 					});
 
 					if (response.ok) {
