@@ -149,7 +149,7 @@
 				'border shadow-lg backdrop-blur-sm',
 				'hover:shadow-xl',
 				'flex flex-col items-center justify-center relative p-3 sm:p-4',
-				localOpened ? 'ring-2 ring-opacity-60' : '',
+				localOpened ? 'ring-2 ring-opacity-60 ring-coral-300' : '',
 			]"
 			:style="
 				localOpened
