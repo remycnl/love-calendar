@@ -10,107 +10,129 @@
 				<div
 					v-for="heart in hearts"
 					:key="heart.id"
-					:class="['absolute text-2xl transition-all duration-1000 heart-explosion', { 'heart-animate': showHearts } ]"
+					:class="[
+						'absolute text-2xl transition-all duration-1000 heart-explosion',
+						{ 'heart-animate': showHearts },
+					]"
 					:style="{
 						left: heart.x + '%',
 						top: heart.y + '%',
-						transform: `translate(-50%, -50%) scale(${heart.scale}) rotate(${heart.rotation}deg)` + (showHearts ? ' scale(1.2)' : ''),
-						animationDelay: heart.delay + 'ms'
+						transform:
+							`translate(-50%, -50%) scale(${heart.scale}) rotate(${heart.rotation}deg)` +
+							(showHearts ? ' scale(1.2)' : ''),
+						animationDelay: heart.delay + 'ms',
 					}">
 					❤️
 				</div>
 			</div>
-			
-			<div class="absolute inset-0 flex items-center justify-center p-4 sm:p-6 lg:p-8">				<Transition name="card" appear>
-					<div v-if="isExpanded" class="relative w-full max-w-xs sm:max-w-md lg:max-w-lg h-80 sm:h-96 perspective-1000" @click.stop>
+
+			<div
+				class="absolute inset-0 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+				<Transition name="card" appear>
+					<div
+						v-if="isExpanded"
+						class="relative w-full max-w-xs sm:max-w-md lg:max-w-lg h-80 sm:h-96 perspective-1000"
+						@click.stop>
 						<!-- Modal Card avec flip animation -->
 						<div
 							:class="[
 								'relative w-full h-full transition-transform duration-700 transform-style-preserve-3d',
 								{ 'rotate-y-180': showBackSide },
 							]">
-					<!-- Face avant de la modal (titre + bouton révéler) -->
-					<div
-						class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden border shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
-						style="
-							background: linear-gradient(
-								135deg,
-								var(--color-cream-50),
-								var(--color-cream-100)
-							);
-							border-color: var(--color-cream-300);
-						">
-						<!-- Icône enveloppe -->
-						<div class="text-4xl sm:text-6xl mb-4 sm:mb-6 animate-gentle-bounce">📩</div>
+							<!-- Face avant de la modal (titre + bouton révéler) -->
+							<div
+								class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden border shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
+								style="
+									background: linear-gradient(
+										135deg,
+										var(--color-cream-50),
+										var(--color-cream-100)
+									);
+									border-color: var(--color-cream-300);
+								">
+								<!-- Icône enveloppe -->
+								<div
+									class="text-4xl sm:text-6xl mb-4 sm:mb-6 animate-gentle-bounce">
+									📩
+								</div>
 
-						<!-- Numéro de semaine -->
-						<div
-							class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text mb-3 sm:mb-4"
-							style="
-								background-image: linear-gradient(
-									90deg,
-									var(--color-coral-600),
-									var(--color-burgundy-600)
-								);
-							">
-							{{ door.week }}
+								<!-- Numéro de semaine -->
+								<div
+									class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text mb-3 sm:mb-4"
+									style="
+										background-image: linear-gradient(
+											90deg,
+											var(--color-coral-600),
+											var(--color-burgundy-600)
+										);
+									">
+									{{ door.week }}
+								</div>
+
+								<!-- Titre -->
+								<h3
+									class="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-center px-2"
+									style="color: var(--color-burgundy-800)">
+									{{ door.title }}
+								</h3>
+
+								<!-- Bouton révéler -->
+								<button
+									@click="revealContent"
+									class="px-6 sm:px-8 cursor-pointer py-3 sm:py-4 text-white font-bold rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base"
+									style="
+										background: linear-gradient(
+											90deg,
+											var(--color-coral-500),
+											var(--color-burgundy-500)
+										);
+									">
+									Révéler le message
+								</button>
+							</div>
+
+							<!-- Face arrière de la modal (message) -->
+							<div
+								class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden rotate-y-180 border shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
+								style="
+									background: linear-gradient(
+										135deg,
+										var(--color-coral-50),
+										var(--color-rose-50)
+									);
+									border-color: var(--color-coral-200);
+								">
+								<!-- Message avec scroll si nécessaire -->
+								<div
+									class="text-base sm:text-2xl leading-relaxed text-center mb-6 sm:mb-8 max-w-full overflow-y-auto flex-1 flex px-2 whitespace-pre-line break-words justify-center"
+									style="color: var(--color-burgundy-800); min-height: 0">
+									<div
+										class="w-full flex justify-center"
+										:class="{
+											'items-center': !isScrollable,
+											'items-start': isScrollable,
+										}"
+										ref="messageContainer"
+										style="min-height: 0">
+										{{ door.text }}
+									</div>
+								</div>
+
+								<!-- Bouton fermer -->
+								<button
+									@click="closeExpanded"
+									class="cursor-pointer px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base"
+									style="
+										background: linear-gradient(
+											90deg,
+											var(--color-rose-400),
+											var(--color-coral-400)
+										);
+									">
+									Fermer
+								</button>
+							</div>
 						</div>
-
-						<!-- Titre -->
-						<h3
-							class="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-center px-2"
-							style="color: var(--color-burgundy-800)">
-							{{ door.title }}
-						</h3>
-
-						<!-- Bouton révéler -->
-						<button
-							@click="revealContent"
-							class="px-6 sm:px-8 cursor-pointer py-3 sm:py-4 text-white font-bold rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base"
-							style="
-								background: linear-gradient(
-									90deg,
-									var(--color-coral-500),
-									var(--color-burgundy-500)
-								);
-							">
-							Révéler le message
-						</button>
-					</div>
-
-					<!-- Face arrière de la modal (message) -->
-					<div
-						class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden rotate-y-180 border shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
-						style="
-							background: linear-gradient(
-								135deg,
-								var(--color-coral-50),
-								var(--color-rose-50)
-							);
-							border-color: var(--color-coral-200);
-						">
-						<!-- Message avec scroll si nécessaire -->
-                        <div
-                            class="text-base sm:text-2xl leading-relaxed text-center mb-6 sm:mb-8 max-w-full overflow-y-auto flex-1 flex items-center justify-center px-2 whitespace-pre-line break-words"
-                            style="color: var(--color-burgundy-800); max-height: 100%; align-items: flex-start;">
-                            {{ door.text }}
-                        </div>
-
-						<!-- Bouton fermer -->
-						<button
-							@click="closeExpanded"
-							class="cursor-pointer px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base"
-							style="
-								background: linear-gradient(
-									90deg,
-									var(--color-rose-400),
-									var(--color-coral-400)
-								);
-							">
-							Fermer
-						</button>
-					</div>
-				</div>
 					</div>
 				</Transition>
 			</div>
@@ -211,6 +233,27 @@ const localOpened = ref(props.door.opened); // État local pour éviter les refr
 const hearts = ref([]);
 const showHearts = ref(false);
 
+// Pour gérer le scrollable
+const isScrollable = ref(false);
+const messageContainer = ref(null);
+
+const checkScrollable = () => {
+	if (messageContainer.value) {
+		const el = messageContainer.value;
+		isScrollable.value = el.scrollHeight > el.clientHeight + 2; // tolérance
+	}
+};
+
+// Vérifier le scrollable à chaque ouverture de la modal et après le flip
+watch([isExpanded, showBackSide], ([expanded, back]) => {
+	if (expanded && back) {
+		// attendre le rendu DOM
+		nextTick(() => {
+			checkScrollable();
+		});
+	}
+});
+
 // Synchroniser l'état local avec les props au montage et en cas de changement externe
 onMounted(() => {
 	localOpened.value = props.door.opened;
@@ -251,15 +294,15 @@ const createHeartExplosion = () => {
 			y: Math.random() * 100,
 			scale: Math.random() * 0.5 + 0.5,
 			rotation: Math.random() * 360,
-			delay: Math.random() * 500
+			delay: Math.random() * 500,
 		});
 	}
-	
+
 	// Déclencher l'animation après un court délai
 	setTimeout(() => {
 		showHearts.value = true;
 	}, 100);
-	
+
 	// Cacher les cœurs après l'animation
 	setTimeout(() => {
 		showHearts.value = false;
@@ -296,7 +339,7 @@ const openDoor = async () => {
 
 			// Émettre l'événement pour mettre à jour le parent avec le nouvel objet
 			emit("doorOpened", updatedDoor);
-			
+
 			// Déclencher l'explosion de cœurs et ouvrir la modal
 			createHeartExplosion();
 			setTimeout(() => {
@@ -331,7 +374,7 @@ const revealContent = async () => {
 const closeExpanded = () => {
 	showBackSide.value = false;
 	showHearts.value = false;
-	
+
 	// Délai pour permettre à l'animation de se terminer
 	setTimeout(() => {
 		isExpanded.value = false;
@@ -358,7 +401,8 @@ const closeExpanded = () => {
 }
 
 /* Animations pour la modal */
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
 	transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .modal-enter-from {
@@ -371,13 +415,15 @@ const closeExpanded = () => {
 	transform: scale(1.15);
 	backdrop-filter: blur(0px);
 }
-.modal-enter-to, .modal-leave-from {
+.modal-enter-to,
+.modal-leave-from {
 	opacity: 1;
 	transform: scale(1);
 }
 
 /* Animations pour la carte */
-.card-enter-active, .card-leave-active {
+.card-enter-active,
+.card-leave-active {
 	transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -479,11 +525,11 @@ const closeExpanded = () => {
 	.perspective-1000 {
 		perspective: 500px;
 	}
-	
+
 	.max-w-xs {
 		max-width: 90vw;
 	}
-	
+
 	.h-80 {
 		height: 14rem;
 	}

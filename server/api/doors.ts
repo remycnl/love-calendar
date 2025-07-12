@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 			}
 
 			// Lire le fichier JSON
-			const filePath = join(process.cwd(), "public", "doors.json");
+			const filePath = join(process.cwd(), "data", "doors.json");
 			const fileContent = await fs.readFile(filePath, "utf-8");
 			const data = JSON.parse(fileContent);
 
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
 
 	// GET request - retourner toutes les enveloppes
 	try {
-		const filePath = join(process.cwd(), "public", "doors.json");
+		const filePath = join(process.cwd(), "data", "doors.json");
 		const fileContent = await fs.readFile(filePath, "utf-8");
 		const data = JSON.parse(fileContent);
 
