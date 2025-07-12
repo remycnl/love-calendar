@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="min-h-screen w-full"
+		class="relative min-h-screen w-full"
 		style="
 			background: linear-gradient(
 				135deg,
@@ -9,6 +9,32 @@
 				#ffffff 100%
 			);
 		">
+        <!-- Statistiques flottantes lisibles sur fond crème et rouge -->
+        <div
+            class="flex fixed top-2 right-2 sm:top-4 sm:right-4 items-center gap-2 sm:gap-4 px-2 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl backdrop-blur-sm z-50 shadow-lg"
+            style="
+                background: rgba(255,255,255,0.45);
+                backdrop-filter: blur(8px);
+            "
+        >
+            <div class="text-center">
+                <div class="text-base sm:text-lg font-bold" style="color: var(--color-burgundy-700)">
+                    {{ openedDoorsCount }}
+                </div>
+                <div class="text-[10px] sm:text-xs" style="color: var(--color-burgundy-500)">
+                    Ouvertes
+                </div>
+            </div>
+            <div class="w-px h-6 sm:h-8" style="background: var(--color-cream-400)"></div>
+            <div class="text-center">
+                <div class="text-base sm:text-lg font-bold" style="color: var(--color-coral-500)">
+                    {{ 52 - openedDoorsCount }}
+                </div>
+                <div class="text-[10px] sm:text-xs" style="color: var(--color-burgundy-500)">
+                    Restantes
+                </div>
+            </div>
+        </div>
 		<!-- Header avec consigne - Full Width et responsive -->
 		<div
 			class="relative overflow-hidden py-8 sm:py-12 w-full"
@@ -20,24 +46,26 @@
 					var(--color-coral-500) 100%
 				);
 			">
-            <!-- Décoration de fond -->
-            <div class="absolute inset-0 overflow-hidden">
-                <div
-                    v-for="i in bubbleCount"
-                    :key="i"
-                    class="absolute rounded-full bg-white/10 animate-float"
-                    :style="{
-                        width: `${Math.random() * 100 + 50}px`,
-                        height: `${Math.random() * 100 + 50}px`,
-                        top: `${Math.random() * 100}%`,
-                        left: `${Math.random() * 100}%`,
-                        animationDelay: `${i * 0.3}s`,
-                        animationDuration: `${4 + Math.random() * 3}s`,
-                    }"></div>
-            </div>
+			<!-- Décoration de fond -->
+			<div class="absolute inset-0 overflow-hidden">
+				<div
+					v-for="i in bubbleCount"
+					:key="i"
+					class="absolute rounded-full bg-white/10 animate-float"
+					:style="{
+						width: `${Math.random() * 100 + 50}px`,
+						height: `${Math.random() * 100 + 50}px`,
+						top: `${Math.random() * 100}%`,
+						left: `${Math.random() * 100}%`,
+						animationDelay: `${i * 0.3}s`,
+						animationDuration: `${4 + Math.random() * 3}s`,
+					}"></div>
+			</div>
 
 			<div class="relative z-10 w-full px-4 sm:px-6 text-center">
-				<div class="text-4xl sm:text-6xl mb-3 sm:mb-4 animate-bounce-gentle">💌</div>
+				<div class="text-4xl sm:text-6xl mb-3 sm:mb-4 animate-bounce-gentle">
+					💌
+				</div>
 				<h1
 					class="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-3 sm:mb-4 tracking-tight px-2">
 					Les Enveloppes de l'Amour
@@ -45,24 +73,30 @@
 				<p
 					class="text-base sm:text-lg md:text-xl mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed px-4"
 					style="color: var(--color-cream-100)">
-                    52 enveloppes pour 52 semaines, pour 52 occasions de te rappeler combien tu comptes pour moi, même à distance. 
-                    Chaque message est une surprise, une douceur, un sourire glissé dans ton quotidien, pour rendre cette année loin de toi plus légère. 
+					52 enveloppes pour 52 semaines, pour 52 occasions de te rappeler
+					combien tu comptes pour moi, même à distance. Chaque message est une
+					surprise, une douceur, un sourire glissé dans ton quotidien, pour
+					rendre cette année loin de toi plus légère.
 				</p>
-                <div class="w-full flex justify-center items-center mt-4 sm:mt-6">
-                    <div
-                        class="w-fit bg-white/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-white/30 mx-2">
-                        <span class="text-white font-semibold text-sm sm:text-base whitespace-nowrap">Conseil :</span>
-                        <span class="text-xs sm:text-sm" style="color: var(--color-cream-100)">
-                            Travaille ta patience... une enveloppe par semaine, pas plus !
-                        </span>
-                    </div>
-                </div>
+				<div class="w-full flex justify-center items-center mt-4 sm:mt-6">
+					<div
+						class="w-fit bg-white/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-white/30 mx-2">
+						<span
+							class="text-white font-semibold text-sm sm:text-base whitespace-nowrap"
+							>Conseil :</span
+						>
+						<span
+							class="text-xs sm:text-sm"
+							style="color: var(--color-cream-100)">
+							Travaille ta patience... une enveloppe par semaine, pas plus !
+						</span>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<!-- Conteneur principal - Full Width et responsive -->
 		<div class="w-full px-4 sm:px-6 py-8 sm:py-12">
-			
 			<!-- Section statistiques - Full Width et responsive -->
 			<div
 				class="w-full backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border shadow-2xl mb-8 sm:mb-12"
@@ -76,8 +110,10 @@
 						style="color: var(--color-burgundy-800)">
 						Ta Progression
 					</h3>
-					<p class="text-sm sm:text-base" style="color: var(--color-burgundy-600)">
-                        Trois stats que tu peux analyser comme une vraie data analyste !
+					<p
+						class="text-sm sm:text-base"
+						style="color: var(--color-burgundy-600)">
+						Trois stats que tu peux analyser comme une vraie data analyste !
 					</p>
 				</div>
 
@@ -193,11 +229,13 @@
 
 			<!-- Footer inspirant - Full Width et responsive -->
 			<div class="w-full text-center px-4">
-                <p class="italic text-sm sm:text-base" style="color: var(--color-burgundy-500)">
-                    "Chaque enveloppe contient un fragment d'amour,
-                    <br class="hidden sm:block" />
-                    et toutes ensemble, elles écrivent notre histoire..."
-                </p>
+				<p
+					class="italic text-sm sm:text-base"
+					style="color: var(--color-burgundy-500)">
+					"Chaque enveloppe contient un fragment d'amour,
+					<br class="hidden sm:block" />
+					et toutes ensemble, elles écrivent notre histoire..."
+				</p>
 
 				<!-- Lien secret vers l'admin -->
 				<div class="mt-6 sm:mt-8">
@@ -224,39 +262,39 @@ const doors = computed(() => doorsData.value?.doors || []);
 
 // Compter les portes ouvertes
 const openedDoorsCount = computed(() => {
-    return doors.value.filter((door) => door.opened).length;
+	return doors.value.filter((door) => door.opened).length;
 });
 
 // Gérer l'ouverture d'une porte - mise à jour locale uniquement
 const handleDoorOpened = (updatedDoor) => {
-    // Mettre à jour directement les données locales sans refresh complet
-    if (doorsData.value?.doors) {
-        const doorIndex = doorsData.value.doors.findIndex(
-            (d) => d.week === updatedDoor.week
-        );
-        if (doorIndex !== -1) {
-            doorsData.value.doors[doorIndex] = { ...updatedDoor };
-        }
-    }
+	// Mettre à jour directement les données locales sans refresh complet
+	if (doorsData.value?.doors) {
+		const doorIndex = doorsData.value.doors.findIndex(
+			(d) => d.week === updatedDoor.week
+		);
+		if (doorIndex !== -1) {
+			doorsData.value.doors[doorIndex] = { ...updatedDoor };
+		}
+	}
 };
 
 // Nombre de bulles dynamique selon la taille de l'écran
 const bubbleCount = ref(12);
 
 function updateBubbleCount() {
-    const w = window.innerWidth;
-    if (w < 640) bubbleCount.value = 8;
-    else if (w < 1024) bubbleCount.value = 14;
-    else if (w < 1536) bubbleCount.value = 20;
-    else bubbleCount.value = 28;
+	const w = window.innerWidth;
+	if (w < 640) bubbleCount.value = 8;
+	else if (w < 1024) bubbleCount.value = 14;
+	else if (w < 1536) bubbleCount.value = 20;
+	else bubbleCount.value = 28;
 }
 
 onMounted(() => {
-    updateBubbleCount();
-    window.addEventListener("resize", updateBubbleCount);
+	updateBubbleCount();
+	window.addEventListener("resize", updateBubbleCount);
 });
 onUnmounted(() => {
-    window.removeEventListener("resize", updateBubbleCount);
+	window.removeEventListener("resize", updateBubbleCount);
 });
 </script>
 
