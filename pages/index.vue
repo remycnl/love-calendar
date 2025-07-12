@@ -1,0 +1,3 @@
+<template>
+	<CalendarGrid />
+</template>
