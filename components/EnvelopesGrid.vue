@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick } from "vue";
+import { ref, computed, watch, nextTick, onMounted } from "vue";
 
 const props = defineProps({
 	doors: {
@@ -41,10 +41,23 @@ const props = defineProps({
 const emit = defineEmits(["door-opened"]);
 
 // État pour contrôler l'affichage de la carte spéciale
+// Initialiser en fonction de l'état actuel des portes
 const showSpecialDoor = ref(false);
+
+// Vérifier au montage si toutes les portes sont déjà ouvertes
+onMounted(() => {
+	// Attendre le prochain tick pour s'assurer que toutes les données sont chargées
+	nextTick(() => {
+		if (props.doors.length > 0 && allDoorsOpened.value) {
+			showSpecialDoor.value = true;
+		}
+	});
+});
 
 // Calculer si toutes les enveloppes normales sont ouvertes
 const allDoorsOpened = computed(() => {
+	// S'assurer qu'il y a des portes avant de vérifier
+	if (!props.doors || props.doors.length === 0) return false;
 	return props.doors.every((door) => door.opened);
 });
 
@@ -63,7 +76,10 @@ const specialDoor = computed(() => {
 
 // Surveiller l'apparition de l'enveloppe spéciale
 watch(allDoorsOpened, async (newValue) => {
-	if (newValue) {
+	// Vérifier qu'il y a des portes avant de procéder
+	if (props.doors.length === 0) return;
+
+	if (newValue && !showSpecialDoor.value) {
 		// Attendre le prochain tick pour s'assurer que le DOM est prêt
 		await nextTick();
 		// Délai avant l'apparition pour créer un effet de suspense
@@ -71,10 +87,8 @@ watch(allDoorsOpened, async (newValue) => {
 			showSpecialDoor.value = true;
 			console.log("🎉 L'enveloppe spéciale est maintenant disponible !");
 		}, 500);
-	} else {
-		// Si toutes les portes ne sont plus ouvertes, cacher la carte spéciale
-		showSpecialDoor.value = false;
 	}
+	// Ne pas cacher la carte spéciale une fois qu'elle est apparue
 });
 </script>
 
