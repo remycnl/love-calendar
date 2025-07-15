@@ -3,7 +3,7 @@
 	<Transition name="modal" appear>
 		<div
 			v-if="isExpanded"
-			class="fixed inset-0 z-50 bg-black/60 backdrop-blur-lg transition-all duration-500"
+			class="fixed inset-0 bg-rose-200/20 z-50 backdrop-blur-lg transition-all duration-500"
 			@click="closeExpanded">
 			<!-- Explosion de cœurs -->
 			<div class="absolute inset-0 pointer-events-none">
@@ -22,7 +22,7 @@
 							(showHearts ? ' scale(1.2)' : ''),
 						animationDelay: heart.delay + 'ms',
 					}">
-					❤️
+					{{ door.week === 0 ? "🎉" : "❤️" }}
 				</div>
 			</div>
 
@@ -31,7 +31,12 @@
 				<Transition name="card" appear>
 					<div
 						v-if="isExpanded"
-						class="relative w-full max-w-xs sm:max-w-md lg:max-w-lg h-80 sm:h-96 perspective-1000"
+						:class="[
+							'relative w-full h-80 sm:h-96 perspective-1000',
+							door.week === 0
+								? 'max-w-sm sm:max-w-lg lg:max-w-xl'
+								: 'max-w-xs sm:max-w-md lg:max-w-lg',
+						]"
 						@click.stop>
 						<!-- Modal Card avec flip animation -->
 						<div
@@ -41,71 +46,83 @@
 							]">
 							<!-- Face avant de la modal (titre + bouton révéler) -->
 							<div
-								class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden border shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
-								style="
-									background: linear-gradient(
-										135deg,
-										var(--color-cream-50),
-										var(--color-cream-100)
-									);
-									border-color: var(--color-cream-300);
-								">
+								class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden border-4 shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
+								:style="{
+									background: 'linear-gradient(135deg, var(--color-rose-50), var(--color-coral-200))',
+									borderColor: 'var(--color-coral-300)'
+								}">
 								<!-- Icône enveloppe -->
 								<div
-									class="text-4xl sm:text-6xl mb-4 sm:mb-6 animate-gentle-bounce">
-									📩
+									:class="[
+										'text-4xl sm:text-6xl mb-4 sm:mb-6',
+										door.week === 0
+											? 'animate-special-bounce'
+											: 'animate-gentle-bounce',
+									]">
+									{{ door.week === 0 ? "🎁" : "📩" }}
 								</div>
 
 								<!-- Numéro de semaine -->
 								<div
-									class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text mb-3 sm:mb-4"
-									style="
-										background-image: linear-gradient(
-											90deg,
-											var(--color-coral-600),
-											var(--color-burgundy-600)
-										);
-									">
+									v-if="door.week !== 0"
+									:class="[
+										'text-3xl sm:text-5xl font-black text-transparent bg-clip-text mb-3 sm:mb-4',
+									]"
+									:style="{
+										backgroundImage:
+											'linear-gradient(90deg, var(--color-coral-600), var(--color-burgundy-600))',
+									}">
 									{{ door.week }}
 								</div>
 
 								<!-- Titre -->
 								<h3
-									class="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-center px-2"
-									style="color: var(--color-burgundy-800)">
+									v-if="door.week !== 0"
+									:class="[
+										'text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-center px-2',
+										door.week === 0 ? 'special-title' : '',
+									]"
+									:style="
+										door.week === 0
+											? { color: 'var(--color-rose-800)' }
+											: { color: 'var(--color-burgundy-800)' }
+									">
 									{{ door.title }}
 								</h3>
 
 								<!-- Bouton révéler -->
 								<button
 									@click="revealContent"
-									class="px-6 sm:px-8 cursor-pointer py-3 sm:py-4 text-white font-bold rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base"
-									style="
-										background: linear-gradient(
-											90deg,
-											var(--color-coral-500),
-											var(--color-burgundy-500)
-										);
-									">
-									Révéler le message
+									:class="[
+										'px-6 sm:px-8 cursor-pointer py-3 sm:py-4 text-white font-bold rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base',
+										door.week === 0 ? 'special-button' : '',
+									]"
+									:style="{
+										background: 'linear-gradient(90deg, var(--color-coral-500), var(--color-burgundy-500))',
+									}">
+									{{
+										door.week === 0
+											? "Découvrir la surprise"
+											: "Révéler le message"
+									}}
 								</button>
 							</div>
 
 							<!-- Face arrière de la modal (message) -->
 							<div
-								class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden rotate-y-180 border shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
-								style="
-									background: linear-gradient(
-										135deg,
-										var(--color-coral-50),
-										var(--color-rose-50)
-									);
-									border-color: var(--color-coral-200);
-								">
+								class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl backface-hidden rotate-y-180 border-4 shadow-2xl backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center justify-center"
+								:style="{
+									background: 'linear-gradient(135deg, var(--color-coral-50), var(--color-rose-50))',
+									borderColor: 'var(--color-coral-200)'
+								}">
 								<!-- Message avec scroll si nécessaire -->
 								<div
 									class="text-base sm:text-2xl leading-relaxed text-center mb-6 sm:mb-8 max-w-full overflow-y-auto flex-1 flex px-2 whitespace-pre-line break-words justify-center"
-									style="color: var(--color-burgundy-800); min-height: 0">
+									:style="
+										door.week === 0
+											? { color: 'var(--color-rose-800)', minHeight: '0' }
+											: { color: 'var(--color-burgundy-800)', minHeight: '0' }
+									">
 									<div
 										class="w-full flex justify-center"
 										:class="{
@@ -121,13 +138,21 @@
 								<!-- Bouton fermer -->
 								<button
 									@click="closeExpanded"
-									class="cursor-pointer px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base"
-									style="
-										background: linear-gradient(
-											90deg,
-											var(--color-rose-400),
-											var(--color-coral-400)
-										);
+									:class="[
+										'cursor-pointer px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 transform hover:scale-105 text-sm sm:text-base',
+										door.week === 0 ? 'special-close' : '',
+									]"
+									:style="
+										door.week === 0
+											? {
+													background:
+														'linear-gradient(90deg, var(--color-rose-400), var(--color-coral-400))',
+													boxShadow: '0 0 15px rgba(255, 105, 180, 0.3)',
+											  }
+											: {
+													background:
+														'linear-gradient(90deg, var(--color-rose-400), var(--color-coral-400))',
+											  }
 									">
 									Fermer
 								</button>
@@ -150,36 +175,62 @@
 				'hover:shadow-xl',
 				'flex flex-col items-center justify-center relative p-3 sm:p-4',
 				localOpened ? 'ring-2 ring-opacity-60 ring-coral-300' : '',
+				door.week === 0 ? 'special-card' : '',
 			]"
 			:style="
-				localOpened
+				door.week === 0
 					? {
-							background: `linear-gradient(135deg, var(--color-coral-50), var(--color-coral-100))`,
+							background: localOpened
+								? 'linear-gradient(135deg, var(--color-rose-50), var(--color-coral-50))'
+								: 'linear-gradient(135deg, var(--color-rose-100), var(--color-coral-100))',
+							borderColor: localOpened
+								? 'var(--color-rose-300)'
+								: 'var(--color-rose-300)',
+							boxShadow: localOpened
+								? '0 0 25px rgba(255, 105, 180, 0.3)'
+								: '0 10px 25px rgba(255, 105, 180, 0.2)',
+					  }
+					: localOpened
+					? {
+							background:
+								'linear-gradient(135deg, var(--color-coral-50), var(--color-coral-100))',
 							borderColor: 'var(--color-coral-300)',
 					  }
 					: {
-							background: `linear-gradient(135deg, var(--color-cream-100), var(--color-cream-200))`,
+							background:
+								'linear-gradient(135deg, var(--color-cream-100), var(--color-cream-200))',
 							borderColor: 'var(--color-cream-300)',
-							boxShadow: `0 10px 25px rgba(218, 108, 108, 0.1)`,
+							boxShadow: '0 10px 25px rgba(218, 108, 108, 0.1)',
 					  }
 			"
 			@click="expandCard">
 			<!-- Icône enveloppe (fermée ou ouverte) -->
 			<div
-				class="text-3xl sm:text-5xl mb-2 sm:mb-3 transform transition-all duration-500 group-hover:scale-110">
-				{{ localOpened ? "📬" : "📪" }}
+				:class="[
+					'text-3xl sm:text-5xl mb-2 sm:mb-3 transform transition-all duration-500 group-hover:scale-110',
+					door.week === 0 ? 'animate-special-bounce !mb-0' : '',
+				]">
+				{{
+					door.week === 0
+						? localOpened
+							? "🎁"
+							: "🎁"
+						: localOpened
+						? "📬"
+						: "📪"
+				}}
 			</div>
 
-			<!-- Numéro de semaine -->
+			<!-- Numéro de semaine (affiché seulement si ce n'est pas la spéciale) -->
 			<div
-				class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text mb-1 sm:mb-2"
-				style="
-					background-image: linear-gradient(
-						90deg,
-						var(--color-coral-600),
-						var(--color-burgundy-600)
-					);
-				">
+				v-if="door.week !== 0"
+				:class="[
+					'text-2xl sm:text-3xl font-black text-transparent bg-clip-text mb-1 sm:mb-2',
+				]"
+				:style="{
+					backgroundImage:
+						'linear-gradient(90deg, var(--color-coral-600), var(--color-burgundy-600))',
+				}">
 				{{ door.week }}
 			</div>
 
@@ -188,9 +239,19 @@
 				:class="[
 					'absolute top-2 sm:top-3 right-2 sm:right-3 w-2 h-2 sm:w-3 sm:h-3 rounded-full',
 					'shadow-lg animate-pulse',
+					door.week === 0 ? 'special-badge' : '',
 				]"
 				:style="
-					localOpened
+					door.week === 0
+						? {
+								backgroundColor: localOpened
+									? 'var(--color-rose-500)'
+									: 'var(--color-rose-400)',
+								boxShadow: localOpened
+									? '0 0 15px var(--color-rose-500)'
+									: '0 0 15px var(--color-rose-400)',
+						  }
+						: localOpened
 						? {
 								backgroundColor: 'var(--color-coral-500)',
 								boxShadow: '0 0 10px var(--color-coral-500)',
@@ -203,14 +264,22 @@
 
 			<!-- Effet de lueur au hover -->
 			<div
-				class="absolute inset-0 rounded-xl sm:rounded-2xl transition-opacity duration-500 pointer-events-none blur-xl opacity-0 group-hover:opacity-100"
-				style="
-					background: linear-gradient(
-						135deg,
-						var(--color-coral-400),
-						var(--color-burgundy-400)
-					);
-					opacity: 0.1;
+				:class="[
+					'absolute inset-0 rounded-xl sm:rounded-2xl transition-opacity duration-500 pointer-events-none blur-xl opacity-0 group-hover:opacity-100',
+					door.week === 0 ? 'special-glow' : '',
+				]"
+				:style="
+					door.week === 0
+						? {
+								background:
+									'linear-gradient(135deg, var(--color-rose-400), var(--color-coral-400))',
+								opacity: '0.2',
+						  }
+						: {
+								background:
+									'linear-gradient(135deg, var(--color-coral-400), var(--color-burgundy-400))',
+								opacity: '0.1',
+						  }
 				"></div>
 		</div>
 	</div>
@@ -273,6 +342,13 @@ watch(
 );
 
 const expandCard = async () => {
+	// Cas spécial pour la carte de la semaine 0 : ouvrir directement la modal
+	if (props.door.week === 0) {
+		createHeartExplosion();
+		isExpanded.value = true;
+		showBackSide.value = false; // Reset l'état du flip
+		return;
+	}
 	// Si l'enveloppe est fermée, l'ouvrir d'abord
 	if (!localOpened.value) {
 		await openDoor();
@@ -284,10 +360,12 @@ const expandCard = async () => {
 	}
 };
 
-// Créer une explosion de cœurs
+// Créer une explosion de cœurs (ou confettis pour l'enveloppe 0)
 const createHeartExplosion = () => {
 	hearts.value = [];
-	for (let i = 0; i < 15; i++) {
+	const heartCount = props.door.week === 0 ? 20 : 15;
+
+	for (let i = 0; i < heartCount; i++) {
 		hearts.value.push({
 			id: i,
 			x: Math.random() * 100,
@@ -452,6 +530,38 @@ const closeExpanded = () => {
 	animation: gentle-bounce 2s ease-in-out infinite;
 }
 
+/* Animation spéciale pour l'enveloppe 0 */
+@keyframes special-bounce {
+	0%,
+	100% {
+		transform: translateY(0) scale(1) rotate(0deg);
+	}
+	25% {
+		transform: translateY(-8px) scale(1.1) rotate(-5deg);
+	}
+	50% {
+		transform: translateY(-3px) scale(1.05) rotate(0deg);
+	}
+	75% {
+		transform: translateY(-8px) scale(1.1) rotate(5deg);
+	}
+}
+
+.animate-special-bounce {
+	animation: special-bounce 2s ease-in-out infinite;
+}
+
+/* Animation de gradient pour l'enveloppe 0 */
+@keyframes gradient-shift {
+	0%,
+	100% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
 /* Animation pour l'explosion de cœurs */
 @keyframes heart-explode {
 	0% {
@@ -475,6 +585,27 @@ const closeExpanded = () => {
 
 .heart-animate {
 	animation: heart-explode 1.5s ease-out forwards;
+}
+
+/* Styles spéciaux pour l'enveloppe 0 */
+.special-card {
+	position: relative;
+}
+
+.special-card::before {
+	content: "";
+	position: absolute;
+	inset: -2px;
+	background: linear-gradient(
+		45deg,
+		var(--color-rose-300),
+		var(--color-coral-300),
+		var(--color-rose-300)
+	);
+	border-radius: inherit;
+	z-index: -1;
+	opacity: 0.3;
+	animation: gradient-shift 3s ease-in-out infinite;
 }
 
 /* Positionnement absolu parfait pour le modal */
