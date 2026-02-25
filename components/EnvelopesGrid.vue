@@ -70,7 +70,7 @@ const specialDoor = computed(() => {
 		week: 0,
 		opened: false, // Toujours fermée au début
 		title: "Ce n'est pas un cadeau…",
-		text: "Toutes ces petites attentions, toutes ces enveloppes que je t'ai laissées, ces mots, ces souvenirs… ce n'était pas vraiment des cadeaux. C'était plutôt une façon de te faire sentir à quel point je t'ai aimé, pensé, attendu pendant cette année.\n\nAujourd'hui, ce que je veux t'offrir, ce n'est pas un objet, ni une surprise matérielle. Ce que je veux, c'est un moment avec toi, un vrai, un inoubliable. Quelque chose qu'on vit à deux, pas à distance.\n\nAlors voilà ma vraie idée : choisir ensemble une destination, peu importe où, juste toi et moi. Prendre nos billets, faire nos sacs, et partir. Pour souffler. Pour se retrouver. Pour créer un souvenir qu'aucune enveloppe n'aurait pu contenir.\n\nCe n'est pas un cadeau.\n\nC'est le début de notre prochaine aventure. Ensemble.\n🤍",
+		text: "Toutes ces petites attentions, toutes ces enveloppes que je t'ai laissées dans cette boîte aux lettres. C'était surtout ma façon de rester avec toi malgré la distance.\n\nAujourd'hui, ce que je veux t'offrir, ce n'est pas un objet, ni une surprise matérielle. Ce que je veux, c'est un moment avec toi, quelque chose qu'on vit à deux, sans avoir à compter les jours avant le prochain départ.\n\nAlors voilà la vraie idée derrière tout ça : on choisit une destination ensemble, peu importe où, juste toi et moi. On prend nos billets, on fait nos sacs, et on part.\n\nLe but: créer un souvenir qu'aucune enveloppe n'aurait pu contenir.\n🤍",
 	};
 });
 

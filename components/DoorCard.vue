@@ -117,7 +117,7 @@
 								}">
 								<!-- Message avec scroll si nécessaire -->
 								<div
-									class="text-base sm:text-2xl leading-relaxed text-center mb-6 sm:mb-8 max-w-full overflow-y-auto flex-1 flex px-2 whitespace-pre-line break-words justify-center"
+									class="text-base sm:text-2xl leading-relaxed text-center mb-6 sm:mb-8 max-w-full overflow-y-auto flex-1 flex px-2 whitespace-pre-line wrap-break-word justify-center"
 									:style="
 										door.week === 0
 											? { color: 'var(--color-rose-800)', minHeight: '0' }
@@ -168,7 +168,7 @@
 	<div class="relative group h-full">
 		<div
 			:class="[
-				'relative w-full h-full min-h-[160px] sm:min-h-[180px] transition-all duration-200 active:scale-95 cursor-pointer',
+				'relative w-full h-full min-h-40 sm:min-h-45 transition-all duration-200 active:scale-95 cursor-pointer',
 				'transform hover:scale-105 hover:-rotate-1',
 				'rounded-xl sm:rounded-2xl overflow-hidden',
 				'border shadow-lg backdrop-blur-sm',
@@ -208,7 +208,7 @@
 			<div
 				:class="[
 					'text-3xl sm:text-5xl mb-2 sm:mb-3 transform transition-all duration-500 group-hover:scale-110',
-					door.week === 0 ? 'animate-special-bounce !mb-0' : '',
+					door.week === 0 ? 'animate-special-bounce mb-0!' : '',
 				]">
 				{{
 					door.week === 0

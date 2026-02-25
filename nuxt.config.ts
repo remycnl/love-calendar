@@ -16,11 +16,12 @@ export default defineNuxtConfig({
 					"./node_modules/.prisma/client/index-browser.js",
 			},
 		},
+    optimizeDeps: {
+			exclude: ["@prisma/client"],
+		},
   },
 
   runtimeConfig: {
     secretPassword: process.env.SECRET_PASSWORD,
   },
-
-  modules: ['@prisma/nuxt'],
 })

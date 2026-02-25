@@ -18,5 +18,19 @@
 				<span>Administration</span>
 			</NuxtLink>
 		</div>
+
+		<!-- Crédits -->
+		<div class="mt-4 sm:mt-6 text-xs text-burgundy-400">
+			<p>
+				Développé avec ❤️ par
+				<NuxtLink
+					to="https://www.remycanal.me"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="underline hover:text-burgundy-500">
+					Rémy Canal
+				</NuxtLink>
+			</p>
+		</div>
 	</div>
 </template>

@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="relative min-h-screen w-full bg-gradient-to-br from-[var(--color-cream-200)] via-[var(--color-cream-50)] to-white"
+		class="relative min-h-screen w-full bg-linear-to-br from-cream-200 via-cream-50 to-white"
 	>
 		<!-- Statistiques flottantes -->
 		<FloatingStats :opened-doors-count="openedDoorsCount" />

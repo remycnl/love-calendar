@@ -27,7 +27,7 @@
 				class="flex flex-col lg:flex-row lg:items-start gap-4 sm:gap-6 lg:gap-8">
 				<!-- Numéro et contrôles - responsive -->
 				<div
-					class="flex-shrink-0 flex lg:flex-col items-center lg:items-center lg:text-center gap-4 lg:gap-0">
+					class="shrink-0 flex lg:flex-col items-center lg:items-center lg:text-center gap-4 lg:gap-0">
 					<div
 						class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center text-white font-black text-lg sm:text-xl mb-0 lg:mb-6 group-hover:scale-110 transition-all duration-300"
 						style="
