@@ -1,14 +1,30 @@
 <script setup>
+const title = "Love Calendar";
+const description =
+	"Un calendrier de l'Avent pour célébrer l'amour chaque jour.";
+const requestUrl = useRequestURL();
+const siteUrl = `${requestUrl.protocol}//${requestUrl.host}`;
+const shareImageUrl = `${siteUrl}/selfie.png`;
+
 useHead({
-	title: "Love Calendar",
 	meta: [
-		{
-			name: "description",
-			content: "Un calendrier de l'Avent pour célébrer l'amour chaque jour.",
-		},
 		{ charset: "utf-8" },
 		{ name: "viewport", content: "width=device-width, initial-scale=1" },
 	],
+});
+
+useSeoMeta({
+	title,
+	description,
+	ogTitle: title,
+	ogDescription: description,
+	ogType: "website",
+	ogUrl: siteUrl,
+	ogImage: shareImageUrl,
+	twitterCard: "summary_large_image",
+	twitterTitle: title,
+	twitterDescription: description,
+	twitterImage: shareImageUrl,
 });
 </script>
 
